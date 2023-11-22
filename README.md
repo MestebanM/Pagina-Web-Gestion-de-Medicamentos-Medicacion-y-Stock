@@ -1,2 +1,4 @@
 # Pagina-Web-Gestion-de-Medicamentos-Medicacion-y-Stock
 Este proyecto es realizado para la Materia de Diseño de Patrones de Software, de la Universidad Piloto de Colombia; este proyecto se basa principalmente en la implementacion de patrones tales como; Adaptador, Singleton, Observador, Proxy, DAO, HTTP, entre otros. Los autores del proyecto son: Leidy Giraldo, Matias Marin y Santiago Herrada.
+
+Este proyecto tiene como principal finalidad el permitirnos a los estudiantes de Ingenieria de Sistemas, experimentar y acercarnos más a las implementaciones que estos patrones nos ofrecen, para que estos a su vez sean de facil acceso y de facil captacion; el Uso de Lenguajes tales como SQL y HTML nos permiten tambien acercarnos a otros campos relacionados y estos a su vez a la facilidad que tenemos como Desarrolladores (Devs) para afrontar las conexion y la eficiencia de los programas.
