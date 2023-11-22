@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interfaz del Farmacéutico</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      background-color: #27ae60; /* Verde esmeralda */
+      padding-top: 20px;
+      color: white;
+    }
+
+    .sidebar a {
+      padding: 16px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      display: block;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #2ecc71;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 16px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .user-info {
+      padding: 0 16px;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="user-info">
+      <p><strong>Farmacéutico</strong></p>
+      <p>ID: 1234</p>
+    </div>
+    <a href="#" onclick="mostrarSeccion('revisar-medicamentos')">Revisar Medicamentos</a>
+    <a href="#" onclick="mostrarSeccion('actualizar-stock')">Actualizar Stock</a>
+    <a href="#" onclick="mostrarSeccion('crear-medicamento')">Crear Medicamento</a>
+    <a href="#" onclick="mostrarSeccion('actualizar-medicamento')">Actualizar Medicamento</a>
+    <a href="#" onclick="mostrarSeccion('eliminar-medicamento')">Eliminar Medicamento</a>
+  </div>
+
+  <div class="content">
+    <div id="revisar-medicamentos" class="section">
+      <h2>Revisar Medicamentos en Existencia</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Stock</th>
+          </tr>
+        </thead>
+        <tbody id="medicamentosTableBody">
+          <!-- Se llenará dinámicamente con JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="actualizar-stock" class="section">
+      <h2>Actualizar Stock de Medicamentos</h2>
+      <form id="formularioStock">
+        <label for="idMedicamentoStock">ID del Medicamento:</label>
+        <input type="text" id="idMedicamentoStock" name="id" required>
+
+        <label for="nuevoStock">Nuevo Stock:</label>
+        <input type="number" id="nuevoStock" required>
+
+        <button type="button" onclick="actualizarStock()">Actualizar Stock</button>
+      </form>
+    </div>
+
+    <div id="crear-medicamento" class="section">
+      <h2>Crear Medicamento</h2>
+      <form  action="CrearMedicamento" method="post" >
+          <label for="idMedicamentoActualizar">ID del Medicamento:</label>
+        <input type="text" id="idMedicamentoActualizar" name="id" required>
+        
+        <label for="nombreNuevoMedicamento">Nombre del Medicamento:</label>
+        <input type="text" id="nombreNuevoMedicamento" name="nombre" required>
+
+        <label for="stockNuevoMedicamento">Stock Inicial:</label>
+        <input type="text" id="stockNuevoMedicamento" name="stock" required>
+ 
+        <button type="submit">Crear Medicamento</button>
+      </form>
+    </div>
+
+    <div id="actualizar-medicamento" class="section">
+      <h2>Actualizar Medicamento</h2>
+      <form id="formularioActualizarMedicamento" action="ActualizarMedicamento" method="post">
+        <label for="idMedicamentoActualizar">ID del Medicamento:</label>
+        <input type="text" id="idMedicamentoActualizar" name="id" required>
+
+        <label for="nuevoNombreMedicamento">Nuevo Nombre:</label>
+        <input type="text" id="nuevoNombreMedicamento" name="nombre" required>
+
+        <label for="nuevoStockMedicamento">Nuevo Stock:</label>
+        <input type="text" id="nuevoStockMedicamento" name="stock" required>
+
+        <button type="submit" >Actualizar Medicamento</button>
+      </form>
+    </div>
+
+    <div id="eliminar-medicamento" class="section">
+      <h2>Eliminar Medicamento</h2>
+      <form  action="EliminarMedicamento" method="post">
+        <label for="idMedicamentoEliminar">ID del Medicamento:</label>
+        <input type="text" id="idMedicamentoEliminar" name="id" required>
+
+        <button type="submit" >Eliminar Medicamento</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    var medicamentos = [
+      { id: 1, nombre: 'Aspirina', stock: 100 },
+      { id: 2, nombre: 'Paracetamol', stock: 50 },
+      // Agregar más medicamentos según sea necesario
+    ];
+
+    function mostrarSeccion(seccionId) {
+      var secciones = document.querySelectorAll('.section');
+      secciones.forEach(function(seccion) {
+        seccion.style.display = 'none';
+      });
+
+      var seccionActual = document.getElementById(seccionId);
+      seccionActual.style.display = 'block';
+
+      if (seccionId === 'revisar-medicamentos') {
+        actualizarTablaMedicamentos();
+      }
+    }
+
+    function actualizarStock() {
+      var idMedicamento = document.getElementById('idMedicamentoStock').value;
+      var nuevoStock = document.getElementById('nuevoStock').value;
+
+      var medicamento = medicamentos.find(function(m) {
+        return m.id === parseInt(idMedicamento);
+      });
+
+      if (medicamento) {
+        medicamento.stock = parseInt(nuevoStock);
+      }
+
+      document.getElementById('idMedicamentoStock').value = '';
+      document.getElementById('nuevoStock').value = '';
+
+      actualizarTablaMedicamentos();
+    }
+
+    function crearMedicamento() {
+      var nombreNuevoMedicamento = document.getElementById('nombreNuevoMedicamento').value;
+      var stockNuevoMedicamento = document.getElementById('stockNuevoMedicamento').value;
+
+      var nuevoMedicamento = {
+        id: medicamentos.length + 1,
+        nombre: nombreNuevoMedicamento,
+        stock: parseInt(stockNuevoMedicamento),
+      };
+
+      medicamentos.push(nuevoMedicamento);
+
+      document.getElementById('nombreNuevoMedicamento').value = '';
+      document.getElementById('stockNuevoMedicamento').value = '';
+
+      actualizarTablaMedicamentos();
+      alert("Medicamento creado correctamente");
+    }
+
+    function actualizarMedicamento() {
+      var idMedicamentoActualizar = document.getElementById('idMedicamentoActualizar').value;
+      var nuevoNombreMedicamento = document.getElementById('nuevoNombreMedicamento').value;
+      var nuevoStockMedicamento = document.getElementById('nuevoStockMedicamento').value;
+
+      var medicamento = medicamentos.find(function(m) {
+        return m.id === parseInt(idMedicamentoActualizar);
+      });
+
+      if (medicamento) {
+        medicamento.nombre = nuevoNombreMedicamento;
+        medicamento.stock = parseInt(nuevoStockMedicamento);
+      }
+
+      document.getElementById('idMedicamentoActualizar').value = '';
+      document.getElementById('nuevoNombreMedicamento').value = '';
+      document.getElementById('nuevoStockMedicamento').value = '';
+
+      actualizarTablaMedicamentos();
+    }
+
+    function eliminarMedicamento() {
+      var idMedicamentoEliminar = document.getElementById('idMedicamentoEliminar').value;
+
+      medicamentos = medicamentos.filter(function(m) {
+        return m.id !== parseInt(idMedicamentoEliminar);
+      });
+
+      document.getElementById('idMedicamentoEliminar').value = '';
+
+      actualizarTablaMedicamentos();
+    }
+
+    function actualizarTablaMedicamentos() {
+      var tbody = document.getElementById('medicamentosTableBody');
+      tbody.innerHTML = '';
+
+      medicamentos.forEach(function(m) {
+        var row = tbody.insertRow();
+        row.innerHTML = '<td>' + m.id + '</td><td>' + m.nombre + '</td><td>' + m.stock + '</td>';
+      });
+    }
+
+    // Actualizar la tabla al cargar la página
+    actualizarTablaMedicamentos();
+    
+
+    
+    
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interfaz del Médico</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .sidebar {
+      height: 100%;
+      width: 250px;
+      position: fixed;
+      background-color: #192a56; /* Azul ultramar */
+      padding-top: 20px;
+      color: white;
+    }
+
+    .sidebar a {
+      padding: 16px;
+      text-decoration: none;
+      font-size: 18px;
+      color: white;
+      display: block;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar a:hover {
+      background-color: #273c75;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 16px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .user-info {
+      padding: 0 16px;
+      margin-bottom: 20px;
+    }
+
+    .search-bar {
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    select, button {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar">
+    <div class="user-info">
+      <p><strong>Nombre del Usuario</strong></p>
+      <p>Nombre de Usuario</p>
+    </div>
+    <a href="#" onclick="mostrarSeccion('buscar-paciente')">Buscar Paciente</a>
+    <a href="#" onclick="mostrarSeccion('generar-medicacion')">Generar Medicación</a>
+    <a href="#" onclick="mostrarSeccion('generar-laboratorios')">Generar Laboratorios</a>
+    <a href="#" onclick="mostrarSeccion('revisar-historia')">Revisar Historia Médica</a>
+  </div>
+
+  <div class="content">
+    <div id="buscar-paciente" class="section">
+      <h2>Buscar Paciente</h2>
+      <div class="search-bar">
+        <input type="text" id="inputCedula" placeholder="Ingrese la cédula...">
+        <button onclick="buscarPaciente()">Buscar</button>
+      </div>
+      <div id="resultadoBusqueda"></div>
+    </div>
+
+    <div id="generar-medicacion" class="section">
+      <h2>Generar Medicación</h2>
+      <select id="selectMedicamentos">
+        <option value="medicamento1">Medicamento 1</option>
+        <option value="medicamento2">Medicamento 2</option>
+        <!-- Agrega más opciones según sea necesario -->
+      </select>
+      <button onclick="agregarMedicacion()">Agregar Medicación</button>
+      <table id="tablaMedicacion">
+        <thead>
+          <tr>
+            <th>Medicamento</th>
+            <th>Dosis</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Contenido de la tabla -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="generar-laboratorios" class="section">
+      <h2>Generar Laboratorios</h2>
+      <select id="selectLaboratorios">
+        <option value="laboratorio1">Laboratorio 1</option>
+        <option value="laboratorio2">Laboratorio 2</option>
+        <!-- Agrega más opciones según sea necesario -->
+      </select>
+      <button onclick="generarLaboratorio()">Generar Laboratorio</button>
+      <!-- Puedes agregar más contenido según tus necesidades -->
+    </div>
+
+    <div id="revisar-historia" class="section">
+      <h2>Revisar Historia Médica</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Cambio</th>
+            <th>Médico</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Contenido de la tabla -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    function mostrarSeccion(seccionId) {
+      var secciones = document.querySelectorAll('.section');
+      secciones.forEach(function(seccion) {
+        seccion.style.display = 'none';
+      });
+
+      var seccionActual = document.getElementById(seccionId);
+      seccionActual.style.display = 'block';
+    }
+
+    function buscarPaciente() {
+      // Lógica de búsqueda del paciente y muestra de resultados
+      var cedula = document.getElementById('inputCedula').value;
+      var resultado = document.getElementById('resultadoBusqueda');
+
+      // Simulación: si se encuentra el paciente
+      if (cedula === '123456789') {
+        resultado.innerHTML = '<h3>Información del Paciente</h3><p>Nombre: Juan Pérez</p><p>Edad: 30 años</p>';
+      } else {
+        resultado.innerHTML = '<h3>Paciente no encontrado</h3>';
+      }
+    }
+
+    function agregarMedicacion() {
+      // Lógica para agregar medicación a la tabla
+      var selectMedicamentos = document.getElementById('selectMedicamentos');
+      var tablaMedicacion = document.getElementById('tablaMedicacion');
+      var dosis = prompt('Ingrese la dosis:');
+
+      var fila = tablaMedicacion.insertRow();
+      var celdaMedicamento = fila.insertCell(0);
+      var celdaDosis = fila.insertCell(1);
+      var celdaAcciones = fila.insertCell(2);
+
+      celdaMedicamento.innerHTML = selectMedicamentos.options[selectMedicamentos.selectedIndex].text;
+      celdaDosis.innerHTML = dosis;
+      celdaAcciones.innerHTML = '<button onclick="eliminarMedicacion(this)">Eliminar</button>';
+    }
+
+    function eliminarMedicacion(botonEliminar) {
+      // Lógica para eliminar medicación de la tabla
+      var fila = botonEliminar.parentNode.parentNode;
+      fila.parentNode.removeChild(fila);
+    }
+
+    function generarLaboratorio() {
+      // Lógica para generar laboratorio
+      var selectLaboratorios = document.getElementById('selectLaboratorios');
+      alert('Laboratorio generado: ' + selectLaboratorios.options[selectLaboratorios.selectedIndex].text);
+    }
+
+    // Puedes agregar más funciones y lógica según sea necesario...
+
+  </script>
+
+</body>
+</html>
